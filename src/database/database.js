@@ -6,4 +6,5 @@ const DataBase = new Sequelize("Caregiver", "nattan", "1234", {
   storage: "../database/sqlite.sqlite",
 });
 
+///asasas
 export { DataBase };
