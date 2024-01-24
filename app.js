@@ -31,6 +31,6 @@ app.get("/status", (request, response) => {
   response.header("Access-Control-Allow-Origin", "*");
 
   response.status(200).json({
-    message: "ola usuario gostoso",
+    message: status,
   });
 });
