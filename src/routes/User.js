@@ -169,7 +169,7 @@ router.post("/login", async (req, res) => {
       .then((Data) => {
         const JsonFormated = Data;
         if (JsonFormated[0]) {
-          const arrayData = Data.map((cu) => cu.toJSON());
+          const arrayData = Data.map((data) => data.toJSON());
 
           const password = arrayData[0].password;
 
