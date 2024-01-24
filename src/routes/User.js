@@ -8,12 +8,17 @@ import { singUpClient } from "../queries/singUpClient.js";
 
 import { GetByEmail } from "../queries/getByEmail.js";
 
+import { DataBase } from "../database/database.js";
+
+import { removeById } from "../queries/removeById.js";
+import { where } from "sequelize";
+
 const router = express.Router();
 
 router.post("/singup", async (request, response) => {
-  res.header("Access-Control-Allow-Origin", "*");
+  // res.header("Access-Control-Allow-Origin", "*");
 
-  res.header("Access-Control-Allow-Headers", "X-Requested-With");
+  // res.header("Access-Control-Allow-Headers", "X-Requested-With");
 
   const userData = request.body;
 
@@ -71,7 +76,7 @@ router.get("/getAllUsers", async (req, res) => {
     });
 });
 
-router.get("/getByEmail", async (req, res) => {
+router.get("/getbyemail", async (req, res) => {
   const data = req.body;
 
   const email = data.email;
@@ -101,6 +106,60 @@ router.get("/getByEmail", async (req, res) => {
         error: error,
       });
     });
+});
+
+router.delete("/removebyid:id", async (req, res) => {
+  const id = parseInt(req.params.id);
+
+  if (id) {
+    const userId = await removeById(id);
+
+    if (userId === 1) {
+      res.status(200).json({
+        message: "user removido",
+        id: id,
+      });
+    } else {
+      res.status(400).json({
+        error: "usuário não encontrado ",
+      });
+    }
+  } else {
+    res.status(400).json({
+      error: "id não é number ",
+    });
+  }
+});
+
+router.put("/editbyid:id", (req, res) => {
+  const idReq = parseInt(req.params.id);
+
+  const fields = req.body;
+
+  if (fields && idReq) {
+    userModel
+      .update(fields, { where: { id: idReq } })
+      .then((afct) => {
+        console.log(afct[0]);
+        if (afct[0] === 1) {
+          res.status(200).json({
+            message: "dados editado",
+            editados: afct,
+          });
+        } else {
+          res.status(400).json({
+            message: "dados não editados",
+            erro: "id duplicado",
+          });
+        }
+      })
+      .catch((error) => {
+        res.status(400).json({
+          message: "deu ruim",
+          erro: error,
+        });
+      });
+  }
 });
 
 export default router;

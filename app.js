@@ -1,8 +1,8 @@
 import express from "express";
 
-import { userModel } from "./models/UserModel.js";
+import { userModel } from "./src/models/UserModel.js";
 
-import userRoutes from "./routes/User.js";
+import userRoutes from "./src/routes/User.js";
 
 import cors from "cors";
 
@@ -31,6 +31,6 @@ app.get("/status", (request, response) => {
   response.header("Access-Control-Allow-Origin", "*");
 
   response.status(200).json({
-    message: "ola usuario",
+    message: "ola usuario gostoso",
   });
 });
