@@ -11,7 +11,6 @@ import { GetByEmail } from "../queries/getByEmail.js";
 import { DataBase } from "../database/database.js";
 
 import { removeById } from "../queries/removeById.js";
-import { where } from "sequelize";
 
 const router = express.Router();
 
@@ -81,9 +80,9 @@ router.get("/getbyemail", async (req, res) => {
 
   const email = data.email;
 
-  res.header("Access-Control-Allow-Origin", "*");
+  // res.header("Access-Control-Allow-Origin", "*");
 
-  res.header("Access-Control-Allow-Headers", "X-Requested-With");
+  // res.header("Access-Control-Allow-Headers", "X-Requested-With");
 
   const users = await GetByEmail(email)
     .then((Data) => {
@@ -159,6 +158,49 @@ router.put("/editbyid:id", (req, res) => {
           erro: error,
         });
       });
+  }
+});
+
+router.post("/login", async (req, res) => {
+  const { email, senha } = req.body;
+
+  if (email && senha) {
+    const users = await GetByEmail(email)
+      .then((Data) => {
+        const JsonFormated = Data;
+        if (JsonFormated[0]) {
+          const arrayData = Data.map((cu) => cu.toJSON());
+
+          const password = arrayData[0].password;
+
+          if (password === senha) {
+            res.status(201).json({
+              message: "achou o usuário",
+              email: email,
+              Senha: senha,
+            });
+          } else {
+            res.status(400).json({
+              message: "senha incorreta",
+            });
+          }
+        } else {
+          res.status(400).json({
+            message: " error",
+            error: "email não encontrado ",
+          });
+        }
+      })
+      .catch((error) => {
+        res.status(400).json({
+          message: "internal error",
+          error: error,
+        });
+      });
+  } else {
+    res.status(400).json({
+      error: "os dados são insuficientes",
+    });
   }
 });
 

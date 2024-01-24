@@ -1,3 +1,5 @@
+import { userModel } from "../models/UserModel.js";
+
 async function removeById(userId) {
   try {
     const userDelete = await userModel.destroy({
