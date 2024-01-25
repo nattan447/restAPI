@@ -1,0 +1,18 @@
+name: workflow-test
+
+on: 
+  push
+
+jobs:
+   workflow-test:
+       runs-on:  windows-latest
+
+steps:
+  - uses:  actions/checkout@v3
+  - name : usando node js 
+  - uses: actions/setup-node@v3
+    with :
+    node-version :  18.16.1
+  - name : instalando dep 
+  - run : npm install 
+  - run : nodemon app.js
