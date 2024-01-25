@@ -1,18 +1,21 @@
-name: workflow-test
 
-on: 
+name: Node.js CI
+
+on:
   push
-
 jobs:
-   workflow-test:
-       runs-on:  windows-latest
+  
+  build:
 
-steps:
-  - uses:  actions/checkout@v3
-  - name : usando node js 
-  - uses: actions/setup-node@v3
-    with :
-    node-version :  18.16.1
-  - name : instalando dep 
-  - run : npm install 
-  - run : nodemon app.js
+    runs-on: ubuntu-latest
+
+
+    steps:
+    - uses: actions/checkout@v3
+    - name: usabdi Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v3
+      with:
+        node-version:  18.x
+        cache: 'npm'
+    - run: npm install
+    - run: node app.js
